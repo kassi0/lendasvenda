@@ -44,6 +44,7 @@ def obfuscate_bidder(bid_id, name):
 # --- Rotas Frontend ---
 
 @app.route("/")
+@app.route("/index.html")
 def index():
     return send_from_directory(BASE_DIR, "index.html")
 
