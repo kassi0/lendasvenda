@@ -1,14 +1,21 @@
 services:
   app:
-    image: python:3.12-alpine
-    container_name: leilao-backend
+    build:
+      context: .
+      dockerfile: Dockerfile.app
+    container_name: dominio-flask
     restart: unless-stopped
-    working_dir: /app
-    volumes:
-      - ./:/app
+    ports:
+      # Expõe a aplicação Flask na porta 5002 do host para o Nginx do servidor
+      - "${PORT:-5002}:5002"
     environment:
-      - PORT=8080
-      - ADMIN_PASSWORD=admin123
-      - INITIAL_BID=300
-      - DB_PATH=/app/lances.db
-    command: python3 server.py
+      - PORT=5002
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin123}
+      - INITIAL_BID=${INITIAL_BID:-300}
+      - DB_PATH=/data/lances.db
+    volumes:
+      - lances_data:/data
+
+volumes:
+  lances_data:
+    name: dominio_lances_data
