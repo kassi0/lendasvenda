@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel Administrativo - Lances de Domínio</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .admin-page {
+            max-width: 1100px;
+            margin: 32px auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+        .admin-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .btn-secondary {
+            background: var(--bg-surface-elevated);
+            color: var(--text-main);
+            border: 1px solid var(--border-strong);
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .btn-secondary:hover {
+            border-color: var(--text-muted);
+        }
+        .btn-danger {
+            background: #991b1b;
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        .login-wrap {
+            max-width: 400px;
+            margin: 80px auto;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.88rem;
+        }
+        .data-table th, .data-table td {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-subtle);
+            text-align: left;
+        }
+        .data-table th {
+            background: var(--bg-surface-elevated);
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .data-table tr:hover td {
+            background: rgba(255, 255, 255, 0.015);
+        }
+        .contact-link {
+            color: #38bdf8;
+            text-decoration: none;
+            font-family: var(--font-mono);
+            font-size: 0.83rem;
+        }
+        .contact-link:hover {
+            text-decoration: underline;
+        }
+        .badge-highest {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: 6px;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <span class="brand-label">Painel de Gestão de Propostas</span>
+            <div class="registrar-badge">
+                <span class="registrar-dot"></span>
+                <span>Transferência: NameCheap</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="admin-page">
+        <!-- Tela de Autenticação -->
+        <div id="loginView" class="card login-wrap">
+            <h2 class="card-title" style="margin-bottom: 6px;">Autenticação</h2>
+            <p class="card-description">Acesso restrito para verificação de contatos e valores recebidos.</p>
+            
+            <div id="loginAlert" class="notification error"></div>
+
+            <form id="adminLoginForm">
+                <div class="field" style="margin-bottom: 16px;">
+                    <label for="adminPass">Chave / Senha de Acesso</label>
+                    <input type="password" id="adminPass" required placeholder="Digite sua senha...">
+                </div>
+                <button type="submit" class="btn-primary">Acessar Painel</button>
+            </form>
+            <div style="margin-top: 16px; text-align: center;">
+                <a href="index.html" class="contact-link" style="color: var(--text-subtle);">&larr; Voltar à página do domínio</a>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboardView" style="display: none;">
+            <div class="admin-toolbar">
+                <div>
+                    <h2 class="card-title" style="font-size: 1.4rem;">Propostas Recebidas</h2>
+                    <p style="color: var(--text-muted); font-size: 0.85rem;">Dados completos dos proponentes para contato e negociação.</p>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <a href="index.html" class="btn-secondary">Página Pública</a>
+                    <button id="refreshBtn" class="btn-secondary">Atualizar</button>
+                    <button id="logoutBtn" class="btn-danger">Sair</button>
+                </div>
+            </div>
+
+            <div class="card" style="padding: 0; overflow-x: auto;">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Valor</th>
+                            <th>Nome Real</th>
+                            <th>E-mail</th>
+                            <th>WhatsApp</th>
+                            <th>Data</th>
+                            <th>Contato Direto</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminBidsBody">
+                        <tr>
+                            <td colspan="6" style="text-align: center; color: var(--text-subtle); padding: 24px;">Carregando...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let authToken = sessionStorage.getItem("admin_token") || "";
+
+        const loginView = document.getElementById("loginView");
+        const dashboardView = document.getElementById("dashboardView");
+        const loginForm = document.getElementById("adminLoginForm");
+        const loginAlert = document.getElementById("loginAlert");
+        const adminBidsBody = document.getElementById("adminBidsBody");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const refreshBtn = document.getElementById("refreshBtn");
+
+        if (authToken) {
+            showDashboard();
+        }
+
+        loginForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const pass = document.getElementById("adminPass").value;
+            loginAlert.style.display = "none";
+
+            try {
+                const res = await fetch("/api/admin/login", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ password: pass })
+                });
+
+                const data = await res.json();
+                if (res.ok && data.success) {
+                    authToken = pass;
+                    sessionStorage.setItem("admin_token", pass);
+                    showDashboard();
+                } else {
+                    loginAlert.textContent = data.error || "Senha incorreta.";
+                    loginAlert.style.display = "block";
+                }
+            } catch (err) {
+                loginAlert.textContent = "Falha ao autenticar com o servidor.";
+                loginAlert.style.display = "block";
+            }
+        });
+
+        logoutBtn.addEventListener("click", () => {
+            sessionStorage.removeItem("admin_token");
+            authToken = "";
+            dashboardView.style.display = "none";
+            loginView.style.display = "block";
+        });
+
+        refreshBtn.addEventListener("click", loadAdminBids);
+
+        function showDashboard() {
+            loginView.style.display = "none";
+            dashboardView.style.display = "block";
+            loadAdminBids();
+        }
+
+        async function loadAdminBids() {
+            adminBidsBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-subtle); padding: 24px;">Carregando propostas...</td></tr>`;
+            try {
+                const res = await fetch("/api/admin/bids", {
+                    headers: { "X-Admin-Password": authToken }
+                });
+
+                if (res.status === 401) {
+                    logoutBtn.click();
+                    return;
+                }
+
+                const data = await res.json();
+                renderBids(data.bids || []);
+            } catch (err) {
+                adminBidsBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: #f87171; padding: 24px;">Erro ao carregar propostas.</td></tr>`;
+            }
+        }
+
+        function renderBids(bids) {
+            if (bids.length === 0) {
+                adminBidsBody.innerHTML = `<tr><td colspan="6" style="text-align: center; color: var(--text-subtle); padding: 32px;">Nenhum lance registrado até o momento.</td></tr>`;
+                return;
+            }
+
+            adminBidsBody.innerHTML = bids.map((b, idx) => {
+                const cleanPhone = b.whatsapp.replace(/\D/g, '');
+                const waPhone = cleanPhone.startsWith('55') ? cleanPhone : `55${cleanPhone}`;
+                const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(`Olá ${b.name}, estamos analisando sua proposta de R$ ${b.amount.toLocaleString('pt-BR', {minimumFractionDigits: 2})} pelo domínio. A transferência será realizada via NameCheap.`)}`;
+
+                return `
+                    <tr>
+                        <td style="font-weight: 700; color: #ffffff; font-family: var(--font-mono);">
+                            R$ ${b.amount.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            ${idx === 0 ? '<span class="badge-highest">Maior Lance</span>' : ''}
+                        </td>
+                        <td><strong>${escapeHtml(b.name)}</strong></td>
+                        <td><a href="mailto:${escapeHtml(b.email)}" class="contact-link">${escapeHtml(b.email)}</a></td>
+                        <td><span style="font-family: var(--font-mono);">${escapeHtml(b.whatsapp)}</span></td>
+                        <td style="color: var(--text-subtle); font-size: 0.8rem;">${escapeHtml(b.created_at)}</td>
+                        <td>
+                            <a href="${waUrl}" target="_blank" class="contact-link" style="color: #34d399; font-weight: 600;">Iniciar Conversa &rarr;</a>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function escapeHtml(str) {
+            return String(str || '').replace(/[&<>"']/g, function(m) {
+                return ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[m];
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negociação de Domínio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-inner">
+            <span class="brand-label">Disponibilidade de Ativo Digital</span>
+            <div class="registrar-badge">
+                <span class="registrar-dot"></span>
+                <span>Transferência via NameCheap</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-container">
+        <section class="hero-section">
+            <span class="status-pill">Disponível para Compra</span>
+            <h1 class="domain-headline" id="domainName">seu-dominio.com</h1>
+            <p class="domain-subheadline">
+                Este domínio está sob custódia e disponível para cessão imediata de titularidade através de push interno ou código EPP/AuthCode.
+            </p>
+        </section>
+
+        <div class="main-grid">
+            <!-- Coluna Principal: Proposta e Lances -->
+            <section class="card">
+                <h2 class="card-title">Registrar Proposta / Lance</h2>
+                <p class="card-description">
+                    Insira seus dados de contato e o valor ofertado. Os nomes dos proponentes são mantidos sob ofuscação pública por privacidade.
+                </p>
+
+                <div class="bids-summary-bar">
+                    <div class="summary-col">
+                        <span class="label">Lance Inicial</span>
+                        <span class="val" id="initialBidDisplay">R$ 300,00</span>
+                    </div>
+                    <div class="summary-col">
+                        <span class="label">Maior Lance Registrado</span>
+                        <span class="val highlight" id="currentHighestDisplay">R$ 300,00</span>
+                    </div>
+                </div>
+
+                <div id="bidAlert" class="notification"></div>
+
+                <form id="bidForm">
+                    <div class="form-grid">
+                        <div class="field full">
+                            <label for="bidName">Nome ou Razão Social</label>
+                            <input type="text" id="bidName" autocomplete="name" placeholder="Ex: Roberto Mendes" required>
+                            <span class="field-tip">Será exibido publicamente de forma ofuscada (ex: R*** M***).</span>
+                        </div>
+
+                        <div class="field">
+                            <label for="bidEmail">E-mail Corporativo / Pessoal</label>
+                            <input type="email" id="bidEmail" autocomplete="email" placeholder="nome@dominio.com" required>
+                        </div>
+
+                        <div class="field">
+                            <label for="bidWhatsapp">WhatsApp / Telefone com DDD</label>
+                            <input type="tel" id="bidWhatsapp" autocomplete="tel" placeholder="(11) 98765-4321" required>
+                        </div>
+
+                        <div class="field full">
+                            <label for="bidAmount" id="bidAmountLabel">Valor do Lance (BRL)</label>
+                            <input type="number" id="bidAmount" min="300" step="10" placeholder="300" required>
+                            <span class="field-tip" id="minBidNotice">Mínimo aceito: R$ 300,00</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="bidSubmitBtn" class="btn-primary">Registrar Lance</button>
+                </form>
+            </section>
+
+            <!-- Coluna Lateral: Procedimento de Transferência e Histórico -->
+            <div>
+                <section class="card info-block">
+                    <h3 class="card-title" style="font-size: 1rem; margin-bottom: 8px;">Transferência NameCheap</h3>
+                    <div class="transfer-box">
+                        Transferência realizada através da <strong>NameCheap</strong>. O processo pode ser concluído imediatamente via <em>Account Push</em> (gratuito entre contas NameCheap) ou mediante fornecimento de chave <em>EPP/AuthCode</em> para migração externa.
+                    </div>
+
+                    <ul class="specs-list">
+                        <li>
+                            <span>Registrador</span>
+                            <span>NameCheap, Inc.</span>
+                        </li>
+                        <li>
+                            <span>Tipo de Transferência</span>
+                            <span>Push Direto / AuthCode</span>
+                        </li>
+                        <li>
+                            <span>Tempo Estimado de Push</span>
+                            <span>Instatâneo (&lt; 15 min)</span>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="card" id="historyCard" style="display: none;">
+                    <h3 class="card-title" style="font-size: 1rem; margin-bottom: 12px;">Últimos Lances Registrados</h3>
+                    <table class="log-table">
+                        <thead>
+                            <tr>
+                                <th>Proponente</th>
+                                <th style="text-align: right;">Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody id="recentBidsBody"></tbody>
+                    </table>
+                </section>
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="footer-inner">
+            <span>&copy; <span id="year"></span> &bull; Cessão e transferência de ativos digitais.</span>
+            <div class="footer-links">
+                <a href="admin.html">Acesso Administrativo</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

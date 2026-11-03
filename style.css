@@ -1,0 +1,394 @@
+:root {
+    --bg-page: #0f141c;
+    --bg-surface: #161d27;
+    --bg-surface-elevated: #1d2633;
+    --border-subtle: #242f3e;
+    --border-strong: #334155;
+    --text-main: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-subtle: #64748b;
+    --accent: #2563eb;
+    --accent-hover: #1d4ed8;
+    --success: #10b981;
+    --namecheap-orange: #de3723;
+    --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Corporativo */
+.site-header {
+    border-bottom: 1px solid var(--border-subtle);
+    background-color: rgba(22, 29, 39, 0.8);
+    backdrop-filter: blur(8px);
+}
+
+.header-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+}
+
+.registrar-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    background-color: var(--bg-surface-elevated);
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-subtle);
+}
+
+.registrar-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background-color: var(--namecheap-orange);
+}
+
+/* Container Principal */
+.page-container {
+    max-width: 1080px;
+    width: 100%;
+    margin: 40px auto;
+    padding: 0 24px;
+    flex: 1;
+}
+
+/* Hero Section */
+.hero-section {
+    margin-bottom: 32px;
+}
+
+.status-pill {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.2);
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+}
+
+.domain-headline {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    word-break: break-all;
+}
+
+.domain-subheadline {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    max-width: 680px;
+}
+
+/* Layout de Duas Colunas */
+.main-grid {
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 860px) {
+    .main-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Cards Institucionais */
+.card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    padding: 24px;
+}
+
+.card-title {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin-bottom: 4px;
+}
+
+.card-description {
+    font-size: 0.88rem;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+}
+
+/* Tabela de Lances Atuais */
+.bids-summary-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+}
+
+.summary-col span.label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-subtle);
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.summary-col span.val {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #ffffff;
+    font-family: var(--font-mono);
+}
+
+.summary-col span.val.highlight {
+    color: #38bdf8;
+}
+
+/* Formulário */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+@media (max-width: 540px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field.full {
+    grid-column: 1 / -1;
+}
+
+.field label {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted);
+}
+
+.field input {
+    background: var(--bg-surface-elevated);
+    border: 1px solid var(--border-strong);
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 0.95rem;
+    padding: 10px 12px;
+    border-radius: 6px;
+    outline: none;
+    transition: border-color 0.15s;
+}
+
+.field input:focus {
+    border-color: var(--accent);
+}
+
+.field input::placeholder {
+    color: var(--text-subtle);
+}
+
+.field-tip {
+    font-size: 0.75rem;
+    color: var(--text-subtle);
+    margin-top: 2px;
+}
+
+/* Alertas */
+.notification {
+    padding: 10px 14px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+    display: none;
+}
+
+.notification.success {
+    display: block;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #34d399;
+}
+
+.notification.error {
+    display: block;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    color: #f87171;
+}
+
+/* Botões */
+.btn-primary {
+    background-color: var(--accent);
+    color: #ffffff;
+    border: none;
+    padding: 11px 18px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.15s;
+}
+
+.btn-primary:hover {
+    background-color: var(--accent-hover);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Coluna Lateral: Transferência NameCheap e Histórico */
+.info-block {
+    margin-bottom: 24px;
+}
+
+.transfer-box {
+    border-left: 3px solid var(--namecheap-orange);
+    background: var(--bg-surface-elevated);
+    padding: 14px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.transfer-box strong {
+    color: #ffffff;
+}
+
+.specs-list {
+    list-style: none;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.specs-list li {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.specs-list li span:last-child {
+    color: #ffffff;
+    font-family: var(--font-mono);
+}
+
+/* Histórico Ofuscado */
+.log-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.83rem;
+    margin-top: 8px;
+}
+
+.log-table th {
+    text-align: left;
+    color: var(--text-subtle);
+    font-weight: 500;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+.log-table td {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border-subtle);
+    color: var(--text-muted);
+}
+
+.log-table td.amount {
+    text-align: right;
+    font-family: var(--font-mono);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.log-table td.bidder {
+    font-family: var(--font-mono);
+    letter-spacing: 0.05em;
+}
+
+/* Footer */
+.site-footer {
+    border-top: 1px solid var(--border-subtle);
+    padding: 24px 0;
+    margin-top: auto;
+}
+
+.footer-inner {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--text-subtle);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.footer-links a {
+    color: var(--text-subtle);
+    text-decoration: none;
+    margin-left: 16px;
+}
+
+.footer-links a:hover {
+    color: var(--text-muted);
+}

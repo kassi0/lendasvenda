@@ -1,0 +1,14 @@
+services:
+  app:
+    image: python:3.12-alpine
+    container_name: leilao-backend
+    restart: unless-stopped
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - PORT=8080
+      - ADMIN_PASSWORD=admin123
+      - INITIAL_BID=300
+      - DB_PATH=/app/lances.db
+    command: python3 server.py
